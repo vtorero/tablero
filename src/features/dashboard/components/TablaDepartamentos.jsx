@@ -5,7 +5,8 @@ import {
     flexRender
 } from '@tanstack/react-table'
 
-const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
+
+const TablaDepartamentos = ({asistenciasdetalles={},loading=true}) =>{
     const columns = [
    /*     {
             header: "ID",
@@ -13,29 +14,34 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
             footer: 'Id'
         },*/
         {
-            header: "PERIODO",
-            accessorKey: 'annio',
+            header: "DEPARTAMENTO",
+            accessorKey: 'dpto',
             footer: 'TOTALES'
         },
         {
-            header: "BASICOS",
-            accessorKey: 'formacion_basica',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('formacion_basica'), 0)
+            header: "PROVINCIAS",
+            accessorKey: 'provincia',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('provincia'), 0)
         },
         {
-            header: "ESPECIALIZADOS",
-            accessorKey: 'formacion_especializada',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('formacion_especializada'), 0)
+            header: "ENTIDADES",
+            accessorKey: 'entidades_asistidas',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('entidades_asistidas'), 0)
+        },
+        {
+            header: "PPRRD VIGENTES",
+            accessorKey: 'pprrd_vigentes',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('pprrd_vigentes'), 0)
+        },
+        {
+            header: "BRECHA",
+            accessorKey: 'brecha',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('brecha'), 0)
         },
         {
             header: "EVALUADORES",
             accessorKey: 'evaluadores',
             footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('evaluadores'), 0)
-        },
-        {
-            header: "PPRRD VIGENTES",
-            accessorKey: 'pprrd',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('pprrd'), 0)
         },
         
     ]
@@ -52,9 +58,8 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
           <p>Cargando datos...</p>
         </div>
       ) : (
-
     <div className="max-w-5xl p-2 mx-auto fill-gray-400">
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-300 rounded-2xl">
             <thead className="bg-gray-200">
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
@@ -66,7 +71,7 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
                     </tr>
                 ))}
             </thead>
-           <tbody>
+            <tbody>
                 {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
                     <tr key={row.id} className="py-10 border-b border-gray-200 hover:bg-gray-100">
@@ -92,11 +97,10 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
                     </tr>
                 ))}
             </tfoot>
-            
         </table>
     </div>
   )
 )
 }
 
-export default DashboardTableResumen
+export default TablaDepartamentos;

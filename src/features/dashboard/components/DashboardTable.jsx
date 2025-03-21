@@ -55,7 +55,7 @@ function DashboardTable({asistenciasdetalles={}}) {
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
-                            <th key={header.id} className="capitalize px-3.5 py-2 border border-slate-300">
+                            <th key={header.id} className="capitalize px-3.5 py-2 border border-slate-300 text-center">
                                 {flexRender(header.column.columnDef.header, header.getContext())}
                             </th>
                         ))}
@@ -65,7 +65,7 @@ function DashboardTable({asistenciasdetalles={}}) {
             <tbody>
                 {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                    <tr key={row.id} className="py-10 border-b border-gray-200 hover:bg-gray-200">
+                    <tr key={row.id} className="py-10 border-b border-gray-200 hover:bg-gray-200 text-center">
                         {row.getVisibleCells().map((cell) => (
                             <td key={cell.id} className="px-4 py-4 border border-slate-300">{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                         ))}
@@ -81,7 +81,7 @@ function DashboardTable({asistenciasdetalles={}}) {
                 {table.getFooterGroups().map(footerGroup => (
                     <tr key={footerGroup.id}>
                         {footerGroup.headers.map(footer => (
-                            <th key={footer.id} className="capitalize px-3.5 py-2 border border-slate-300">
+                            <th key={footer.id} className="capitalize px-3.5 py-2 border border-slate-300 text-center">
                                 {flexRender(footer.column.columnDef.footer, footer.getContext())}
                             </th>
                         ))}

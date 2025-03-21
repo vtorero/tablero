@@ -5,6 +5,7 @@ import UsersIcon from "@heroicons/react/24/outline/UsersIcon";
 import CircleStackIcon from "@heroicons/react/24/outline/CircleStackIcon";
 import CreditCardIcon from "@heroicons/react/24/outline/CreditCardIcon";
 import DashboardTopBar from "./components/DashboardTopBar";
+
 import { useEffect, useState, Fragment } from "react";
 import axiosClient from "../../axios-client";
 import { Link } from "react-router-dom";
@@ -12,14 +13,6 @@ import { useStateContext } from "../../context/ContextProvider";
 import DashboardLine from "./components/DashboardLine";
 import DashboardTable from "./components/DashboardTable";
 import Mapa from "../mapa/Mapa";
-import DashboardTableResumen from "./components/DashboardTableResumen";
-import MyBarChart from "./components/MyBarChart";
-import LineChartComponent from "./components/LineChartComponent";
-import CircularDos from "./components/CircularDos";
-import TablaDepartamentos from "./components/TablaDepartamentos";
-import NestedTable from "./components/NestedTable";
-import TablaNivelesGobierno from "./components/TablaNivelesGobierno";
-
 
 const statsData = [
   {title: "PPRRD", value: "0", icon: <CreditCardIcon className="w-8 h-8" />, description: "↗︎ Aprobados",},
@@ -31,14 +24,12 @@ const statsData = [
 const Dashboard = () => {
     const [asistencias, setAsistencias] = useState(statsData);
     const [asistenciasdetalles, setAsistenciasdetalles] = useState([]);
-    const [asistenciaDepartamentos, setAsistenciaDeartamentos] = useState([]);
+    
     const [loading, setLoading] = useState(false);
     const { setNotification } = useStateContext();
 
     const [departamento, setDepartamento] = useState([]);
     const [ubigodepartamento, setUbigeodepartamento] = useState('0');  
-    const [resumen, setResumen] = useState('0');  
-    const [tituloDep,setTitulodep] = useState('RESUMEN GENERAL');
 
     const handleDepartamentoChange = (event) => {
         setUbigeodepartamento(event.target.value);
@@ -50,51 +41,12 @@ const Dashboard = () => {
     };
     //useEffect(getDepartamento, [])
     useEffect(() => {
-        const getResumen = async () =>{
-            setLoading(true);
-            try {
-                //const dptos = await axiosClient.get('/departamento');
-                //setDepartamento(dptos.data)
-                await axiosClient.get('/resumen')
-                    .then((response) => {
-                        //setDepartamento(JSON.stringify(response, null, 2))
-                        setResumen(response.data.data);
-                        setLoading(false);
-                })
-                //console.log('Departamento:', departamento);
-            } catch (error) {
-                setError(error.message); // More specific error message
-            } finally {
-                //setIsLoading(false);
-            }
-        }
-
-        const getDepartamentosPPRRD = async () =>{
-            setLoading(true);
-            try {
-                //const dptos = await axiosClient.get('/departamento');
-                //setDepartamento(dptos.data)
-                await axiosClient.get('/departamentos_pprrd')
-                    .then((response) => {
-                        //setDepartamento(JSON.stringify(response, null, 2))
-                        setAsistenciaDeartamentos(response.data.data);
-                        setLoading(false);
-                })
-                //console.log('Departamento:', departamento);
-            } catch (error) {
-                setError(error.message); // More specific error message
-            } finally {
-                //setIsLoading(false);
-            }
-        }
-
         const getDepartamento = async () => {
             try {
                 //const dptos = await axiosClient.get('/departamento');
                 //setDepartamento(dptos.data)
                 await axiosClient.get('/departamento')
                     .then((response) => {
-
                         //setDepartamento(JSON.stringify(response, null, 2))
                         setDepartamento(response.data)
                 })
@@ -106,8 +58,6 @@ const Dashboard = () => {
             }
         }        
         getDepartamento();
-        getResumen();
-        getDepartamentosPPRRD();
     }, []);
 
     const getData = () => {
@@ -115,15 +65,11 @@ const Dashboard = () => {
         //atinstrumento/{ubigeo}
         //axiosClient.get("/resumen-at/2020")
         //axiosClient.get("/atinstrumento/0")
-        //axiosClient.get(`/atinstrumento/${ubigodepartamento}`)
-        axiosClient.get(`/resumen_departamento/${ubigodepartamento}`)
-            .then(({ data }) => {
+        axiosClient.get(`/atinstrumento/${ubigodepartamento}`)
+        .then(({ data }) => {
             setLoading(false);
-            setResumen(data.data); 
-            //console.log("datax",data.data[0].nombredep);
-            setTitulodep('RESUMEN POR PERIODO '+ data.data[0].nombredep); 
             //setAsistencias(data.data);
-            /*const nextAsistencias = [
+            const nextAsistencias = [
             {
                 title: "PPRRD", value: data.datatotales.sum_pprrd.toString(),
                 icon: <CreditCardIcon className="w-8 h-8" />,
@@ -146,8 +92,7 @@ const Dashboard = () => {
             },
             ];
             setAsistencias(nextAsistencias);                 
-            setAsistenciasdetalles(data.data);  */
-                    
+            setAsistenciasdetalles(data.data);            
         })
         //.catch(() => {setLoading(false);});
         .catch((err) => {console.log(err); setLoading(false);});
@@ -170,18 +115,18 @@ const Dashboard = () => {
           <h1 className="text-4xl font-bold"> Dashboard </h1>
         </div> */}
             <p className="text-2xl font-bold dark:text-whit">
-                RESUMEN INICIAL</p>         
+                INSTRUMENTOS APROBADOS</p>         
             <div className="grid grid-cols-1 gap-6 pt-8 mt-2 lg:grid-cols-2 md:grid-cols-2">
                 <select className="w-full select select-ghost" value={ubigodepartamento} onChange={handleDepartamentoChange}>
                     <option value="0">TODOS LOS DEPARTAMENTOS</option>
                     {departamento.map((data) => (
-                        <option key={data.departamentos_id+1} value={data.departamentos_id}>
-                            {"DEPARTAMENTO DE "+data.dpto}
+                        <option key={data.id} value={data.ubigeo}>
+                            {"DEPARTAMENTO DE "+data.name}
                         </option>
                     ))}
                 </select>
             </div>         
-             <div className="flex flex-col lg:flex-row">
+            <div className="flex flex-col lg:flex-row">
                 {/** ---------------------- Different stats content 1 ------------------------- */}
                 <div className="grid w-full gap-3 pt-2 lg:grid-cols-4">
                     {
@@ -193,93 +138,31 @@ const Dashboard = () => {
                     }
                 </div>
             </div>
-            
+
             {/* <div className="flex flex-col items-center justify-center h-screen">
                 <div className="w-full md:w-1/2 lg:w-1/3">
                     <div className="w-full h-96 border border-gray-300">
                     </div>
                 </div>
-            </div>               
- */}
-            <div className="grid w-full gap-3 pt-2 lg:grid-cols-4 mt-8">                
-                <div className="border-2 shadow-md stats bg-base-200/50">
-                    <div className="p-6 bg-base-200/50 rounded-xl">
-                       <Mapa ubigeo={ubigodepartamento} resetUbigeo={handleUbigeoReset}/>
-                    </div>
-                </div>
-                <div className="border-2 shadow-md stats bg-base-200/50">       
-                            <div className="p-6 bg-base-200/50 rounded-xl">
-                            <h1 className="mb-4 text-lg font-bold text-center">Capacitados básicos y especializados</h1>
-                            <MyBarChart ubigeo={ubigodepartamento}/>
-                            </div>
-                </div>
-                <div className="border-2 shadow-md stats bg-base-200/50">
-                    <div className="p-6 bg-base-200/50 rounded-xl">
-                    <h1 className="mb-4 text-lg font-bold text-center">Capacitados por año</h1>
-                    <LineChartComponent ubigeo={ubigodepartamento}/>
-                    </div>
-                </div>
-                <div className=" bg-base-200/50">
-                    <div className="p-8 bg-base-200/50 rounded-xl">
-                   
-                {/*<DonutChart/>*
-                <CircularPercentageChart percentage={85}/>
-                */}
-                <CircularDos percentage={35} size={300} title="CAPACITADOS"/>
-                    </div>
-                </div>
-            </div>
-            <div className="mt-8 mb-8 divide-y-4 divide-black divide-opacity-25">
-                <hr/>
-            </div>
-            <div className="grid w-full gap-3 pt-2 lg:grid-cols-2">
-            <div className="stats bg-base-200/50">
-                    <div className="p-8 border-2 bg-base-200/50 rounded-xl">
-                    
+            </div>               */}
 
-                    <h1 className="mb-4 text-lg font-bold text-center">RESUMEN POR DEPARTAMENTOS</h1>
-                        <TablaDepartamentos asistenciasdetalles={asistenciaDepartamentos} loading={loading}/>
-                    </div>
-                </div>
-                <div className="stats bg-base-200/50">
+            <div className="flex flex-col lg:flex-row">                
+                <div className="w-full md:w-1/2 lg:w-1/3 pt-5">
                     <div className="p-8 border-2 bg-base-200/50 rounded-xl">
-                    <h1 className="mb-4 text-lg font-bold text-center">{tituloDep}</h1>
-                        <DashboardTableResumen asistenciasdetalles={resumen} loading={loading}/>
-                    </div>
-                </div>
-                
-            </div>
-            <div className="grid w-full gap-3 pt-2 lg:grid-cols-2">                
-                <div className="stats bg-base-200/50">
-                    <div className="p-6 bg-base-200/50 rounded-xl">
-                    <CircularDos percentage={50} size={300} title="EVALUADORES"/>
-                    </div>
-                </div>
-                <div className="stats bg-base-200/50">
-                    <div className="p-6 bg-base-200/50 rounded-xl">
-                    <CircularDos percentage={40} size={300} title="PPRRD VIGENTES"/>
+                        <Mapa ubigeo={ubigodepartamento} resetUbigeo={handleUbigeoReset}/>
                     </div>
                 </div>
             </div>
-            <div className="grid w-full gap-3 pt-2 lg:grid-cols-2">
-                <div className="stats bg-base-200/50">
-                <NestedTable/>
-                </div>
-                <div className="stats bg-base-200/50">
-                <TablaNivelesGobierno/>
-                </div>
-            </div>
-           
-            {/*<div className="grid grid-cols-1 gap-6 pt-8 mt-2 lg:grid-cols-2 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 pt-8 mt-2 lg:grid-cols-2 md:grid-cols-2">
                 <select className="w-full select select-ghost" value={ubigodepartamento} onChange={handleDepartamentoChange}>
                     <option value="0">TODOS LOS DEPARTAMENTOS</option>
                     {departamento.map((data) => (
-                        <option key={data.id} value={data.departamentos_id}>
-                            {"DEPARTAMENTO DE "+data.dpto}
+                        <option key={data.id} value={data.ubigeo}>
+                            {"DEPARTAMENTO DE "+data.name}
                         </option>
                     ))}
                 </select>
-            </div>*/}
+            </div>
             <div className="flex flex-col gap-3 lg:flex-row">
                 <div className="mr-0 basis-3/5 md:mr-2">       
                     <div className="pt-2">

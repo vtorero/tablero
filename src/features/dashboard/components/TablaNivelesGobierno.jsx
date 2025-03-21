@@ -1,11 +1,34 @@
-import { ClipLoader } from "react-spinners";
-import {
-    useReactTable, 
-    getCoreRowModel,
-    flexRender
-} from '@tanstack/react-table'
+import { useState,useEffect } from "react"
+import {useReactTable, getCoreRowModel, flexRender} from '@tanstack/react-table'
+import axiosClient from "../../../axios-client";
 
-const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
+
+const TablaNivelesGobierno = () => {
+
+  const [data, setData] = useState([]);
+
+
+useEffect(() => {
+
+  const getResumen = async () =>{
+    try {
+        await axiosClient.get('/niveles_gobierno')
+            .then(({data}) => {
+                setData(data.data);
+        })
+        
+    } catch (error) {
+        setError(error.message); 
+    } finally {
+     
+    }
+  }
+  getResumen();
+
+}, []);
+
+
+
     const columns = [
    /*     {
             header: "ID",
@@ -13,48 +36,46 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
             footer: 'Id'
         },*/
         {
-            header: "PERIODO",
-            accessorKey: 'annio',
+            header: "DEPARTAMENTO",
+            accessorKey: 'dpto',
             footer: 'TOTALES'
         },
         {
-            header: "BASICOS",
-            accessorKey: 'formacion_basica',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('formacion_basica'), 0)
+            header: "NACIONAL",
+            accessorKey: 'nacional',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('nacional'), 0)
         },
         {
-            header: "ESPECIALIZADOS",
-            accessorKey: 'formacion_especializada',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('formacion_especializada'), 0)
+            header: "REGIONAL",
+            accessorKey: 'regional',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('regional'), 0)
         },
         {
-            header: "EVALUADORES",
-            accessorKey: 'evaluadores',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('evaluadores'), 0)
+            header: "PROVINCIAL",
+            accessorKey: 'provincial',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('provincial'), 0)
         },
         {
-            header: "PPRRD VIGENTES",
-            accessorKey: 'pprrd',
-            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('pprrd'), 0)
+            header: "DISTRITAL",
+            accessorKey: 'distrital',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('distrital'), 0)
+        },
+        {
+            header: "TOTAL",
+            accessorKey: 'total',
+            footer: ({ table }) => table.getFilteredRowModel().rows.reduce((total, row) => total + row.getValue('total'), 0)
         },
         
     ]
     //const [data] = useState(() => [...asistenciasdetalles]);
     const table = useReactTable({
-        data: asistenciasdetalles, 
+        data: data, 
         columns: columns, 
         getCoreRowModel: getCoreRowModel(),
     })
   return (
-    loading ? (
-        <div style={{ textAlign: "center", margin: "20px" }}>
-          <ClipLoader color="#8884d8" size={40} />
-          <p>Cargando datos...</p>
-        </div>
-      ) : (
-
     <div className="max-w-5xl p-2 mx-auto fill-gray-400">
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-300 rounded-2xl">
             <thead className="bg-gray-200">
                 {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
@@ -66,7 +87,7 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
                     </tr>
                 ))}
             </thead>
-           <tbody>
+            <tbody>
                 {table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
                     <tr key={row.id} className="py-10 border-b border-gray-200 hover:bg-gray-100">
@@ -92,11 +113,9 @@ const DashboardTableResumen =({asistenciasdetalles={},loading}) => {
                     </tr>
                 ))}
             </tfoot>
-            
         </table>
     </div>
   )
-)
 }
 
-export default DashboardTableResumen
+export default TablaNivelesGobierno

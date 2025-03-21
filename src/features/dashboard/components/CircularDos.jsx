@@ -1,19 +1,21 @@
-import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { useState,useEffect } from 'react';
+import { useEffect } from 'react';
 
-const CircularDos = ({ percentage, size = 300}) => {
+const CircularDos = ({ percentage, size = 300,title=''}) => {
   let data = [
     { name: "Filled", value: percentage },
     { name: "Remaining", value: 100-percentage },
   ];
-
-  const COLORS = ["#4CAF50", "#E0E0E0"];
+  
+  //const COLORS = ["#4CAF50", "#E0E0E0"];
+  const COLORS = ["#8884d8", "#E0E0E0"];
   useEffect(() => {
   }, [percentage]);
 
 
   return (
+    <>
+     <h1 className="mb-4 text-lg font-bold text-center">{title}</h1>
     <div className="mt-8 mx-auto relative flex items-center justify-center" style={{ width: size, height: size }}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
@@ -21,7 +23,7 @@ const CircularDos = ({ percentage, size = 300}) => {
             data={data}
             cx="50%"
             cy="50%"
-            innerRadius={size * 0.35}
+            innerRadius={size * 0.30}
             outerRadius={size * 0.5}
             fill="#8884d8"
             paddingAngle={1}
@@ -35,7 +37,8 @@ const CircularDos = ({ percentage, size = 300}) => {
       </ResponsiveContainer>
       <div className="absolute text-5xl font-bold">{percentage}%</div>
     </div>
+    </>
   );
 };
 
-export default CircularDos;
+export default CircularDos

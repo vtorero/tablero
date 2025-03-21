@@ -18,7 +18,7 @@ const MiPieChart = () => {
         outerRadius={100}
         fill="#8884d8"
         dataKey="value"
-        label
+        
       >
         {data.map((entry, index) => (
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

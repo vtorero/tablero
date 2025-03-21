@@ -20,7 +20,7 @@ const LeftSidebar = () => {
 
                 <li className="mb-2 text-xl font-semibold">
                     {/* <Link to={'/app/welcome'}><img className="w-10 mask mask-squircle" src="/assets/img/cenepred/logo192.png" alt="DashWind Logo"/>RENAT</Link> */}
-                    <Link to={'/app/welcome'}>
+                    <Link to={'/tablero-renat/inicio'}>
                         <div className="bg-transparent">
                             <img className="w-16 h-12 md:w-32 lg:w-48 drop-shadow-[0_35px_35px_rgba(255,255,255,0.9)]" src={imgCenepredLogo} />
                         </div>

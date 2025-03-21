@@ -12,6 +12,7 @@ import {useStateContext} from '../../../context/ContextProvider'
 import DashboardLine from './components/DashboardLine'
 import DashboardTable from './components/DashboardTable'
 import Mapa from '../../mapa/Mapa'
+import NestedTable from '../../dashboard/components/NestedTable'
 
 const statsData = [
     {title : "En proceso", value : "0", icon : <CreditCardIcon className='w-8 h-8'/>, description : "↗︎ asistencias"},
@@ -127,8 +128,8 @@ const Pprrd = () => {
                 <select className="w-full select select-ghost" value={ubigodepartamento} onChange={handleDepartamentoChange}>
                     <option value="0">TODOS LOS DEPARTAMENTOS</option>
                     {departamento.map((data) => (
-                        <option key={data.id} value={data.ubigeo}>
-                            {"DEPARTAMENTO DE "+data.name}
+                        <option key={data.id} value={data.departamentos_id}>
+                            {"DEPARTAMENTO DE "+data.dpto}
                         </option>
                     ))}
                 </select>            
@@ -151,9 +152,8 @@ const Pprrd = () => {
                         <Mapa ubigeo={ubigodepartamento} resetUbigeo={handleUbigeoReset}/>                        
                     </div>
                 </div>
-
             </div>
-            <div className="grid grid-cols-1 gap-6 pt-8 mt-2 lg:grid-cols-2 md:grid-cols-2">
+            {/*<div className="grid grid-cols-1 gap-6 pt-8 mt-2 lg:grid-cols-2 md:grid-cols-2">
                 <select className="w-full select select-ghost" value={ubigodepartamento} onChange={handleDepartamentoChange}>
                     <option value="0">TODOS LOS DEPARTAMENTOS</option>
                     {departamento.map((data) => (
@@ -162,14 +162,13 @@ const Pprrd = () => {
                         </option>
                     ))}
                 </select>
-            </div>
+            </div>*/}
             <div className="flex flex-col gap-3 lg:flex-row">
                 <div className="mr-0 basis-3/5 md:mr-2">       
                     <div className="pt-2">
                         <div className="flex flex-row p-8 border-2 bg-base-200/50 rounded-xl">
                         <div className="container mx-auto mt-4">
-                            <h1 className="mb-4 text-lg font-bold text-center">PPRRD</h1>                          
-                            <DashboardLine asistenciasdetalles={asistenciasdetalles} ></DashboardLine>
+                        <NestedTable/>
                         </div>
                         </div>
                     </div>
@@ -177,6 +176,8 @@ const Pprrd = () => {
                 <div className="mr-0 basis-2/5 md:mr-2">
                     <div className="pt-2">
                         <div className="flex flex-row p-8 border-2 bg-base-200/50 rounded-xl">
+                        <h1 className="mb-4 text-lg font-bold text-center">PPRRD</h1>                          
+                            <DashboardLine asistenciasdetalles={asistenciasdetalles} ></DashboardLine>
                             <div className="container mx-auto mt-4">
                             <h1 className="mb-4 text-lg font-bold text-center">PPRRD</h1>
                                 <DashboardTable asistenciasdetalles={asistenciasdetalles}></DashboardTable>
